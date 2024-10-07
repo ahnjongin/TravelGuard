@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
 const DetailedCountryPage = () => {
-  const { countryCode } = useParams(); // 라우터로부터 국가 코드 가져옴
+  const { countryCode } = useParams(); 
   const [countryInfo, setCountryInfo] = useState<any>(null);
   const [embassyInfo, setEmbassyInfo] = useState<any[]>([]);
   const [entryInfo, setEntryInfo] = useState<any[]>([]);
   const [safetyNotices, setSafetyNotices] = useState<any[]>([]);
   const [loadingSafetyNotices, setLoadingSafetyNotices] = useState(true);
-  const [loadingEntryInfo, setLoadingEntryInfo] = useState(true); // 입국 정보 로딩 상태
+  const [loadingEntryInfo, setLoadingEntryInfo] = useState(true); 
 
   useEffect(() => {
     const fetchCountryInfo = async () => {
@@ -22,13 +22,13 @@ const DetailedCountryPage = () => {
         );
 
         // 응답 데이터 전체 출력 (구조 확인용)
-        console.log("API Response:", response.data);
+        console.log("API Response:", response.data.data);
 
         // 응답 데이터에서 countryCode와 일치하는 국가 정보를 찾음 (대소문자 구분 없이 비교)
         const countryData = response.data.data.find(
           (country: any) =>
             country.country_iso_alp2.toUpperCase() ===
-            countryCode.toUpperCase(),
+            countryCode?.toUpperCase(),
         );
 
         if (countryData) {

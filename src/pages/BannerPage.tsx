@@ -2,25 +2,16 @@
 import { useEffect, useRef, useState } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
 import { TravelWarning } from "../models/travel-warning";
-import { ColorLevel } from "../constants";
+import { ColorLevel } from "../constants"; // ColorLevel을 직접 가져옴
 
-const ColorLevelMap = {
-  0: `${ColorLevel[0]}`,
-  1: `${ColorLevel[1]}`,
-  2: `${ColorLevel[2]}`,
-  3: `${ColorLevel[3]}`,
-  4: `${ColorLevel[4]}`,
-};
 
-const mapAlarmLevelToColor = (alarmLevel: keyof typeof ColorLevel) => {
-  return ColorLevelMap[alarmLevel];
-};
 
 const GlobeComponent = () => {
   const globeRef = useRef<GlobeMethods>();
   const [countriesData, setCountriesData] = useState(null);
   const [alertData, setAlertData] = useState<TravelWarning | null>(null);
 
+  // 경고 정보를 가져오는 함수
   const fetchTravelWarnings = async () => {
     try {
       const response = await fetch(
@@ -45,6 +36,7 @@ const GlobeComponent = () => {
     }
   };
 
+  // 국가 데이터를 가져오는 함수
   const fetchCountriesData = async () => {
     try {
       const data = await fetch("/countries.geojson", {
@@ -70,12 +62,7 @@ const GlobeComponent = () => {
       alertData != null &&
       countriesData != null
     ) {
-      //   globeRef.current.controls().autoRotate = true;
-      //   globeRef.current.controls().autoRotateSpeed = 0.3;
-
-      //   globeRef.current.pointOfView({ altitude: 4 }, 5000);
       console.log("Applying colors to the globe");
-      // setCountryColors(globeRef.current, alertData);
     }
   }, [alertData, countriesData]);
 
@@ -105,14 +92,10 @@ const GlobeComponent = () => {
           );
           if (countryWarning) {
             const alarmLevel = countryWarning.alarm_lvl;
-            return mapAlarmLevelToColor(alarmLevel);
+            return ColorLevel[alarmLevel] || ColorLevel[0]; 
           }
-          return ColorLevelMap[0]; // Default color for countries with no alert
+          return ColorLevel[0]; // 기본 값
         }}
-        //     polygonLabel={({ properties: d }) => `
-        //     <b>${d.ADMIN} (${d.ISO_A2})</b> <br />
-        //     Population: <i>${Math.round(+d.POP_EST / 1e4) / 1e2}M</i>
-        //   `}
       />
     </div>
   );

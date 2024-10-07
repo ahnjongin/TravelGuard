@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputField from "../components/common/Input";
-import { ColorLevel } from "../constants"; 
+import { ColorLevel } from "../constants";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
@@ -46,7 +47,7 @@ const CountrySearchPage = () => {
   };
 
   const getColorByAlarmLevel = (alarmLevel: number) => {
-    return ColorLevel[alarmLevel] || ColorLevel[0]; // ColorLevel에서 가져옴, 기본은 0단계 색상
+    return ColorLevel[alarmLevel] || ColorLevel[0];
   };
 
   const filteredCountries = Array.isArray(countries)
