@@ -1,21 +1,21 @@
-/* eslint-disable no-prototype-builtins */
 import { useEffect, useRef, useState } from "react";
 import Globe, { GlobeMethods } from "react-globe.gl";
 import { TravelWarning } from "../models/travel-warning";
-import { ColorLevel } from "../constants"; // ColorLevel을 직접 가져옴
-
-
+import { ColorLevel } from "../constants";
+import { FeatureCollection } from "geojson";
 
 const GlobeComponent = () => {
   const globeRef = useRef<GlobeMethods>();
-  const [countriesData, setCountriesData] = useState(null);
+  const [countriesData, setCountriesData] = useState<FeatureCollection | null>(
+    null,
+  );
   const [alertData, setAlertData] = useState<TravelWarning | null>(null);
 
   // 경고 정보를 가져오는 함수
   const fetchTravelWarnings = async () => {
     try {
       const response = await fetch(
-        "http://apis.data.go.kr/1262000/TravelAlarmService0404/getTravelAlarm0404List?serviceKey=YO9eH5JtPGlCnJe4hsmmj0Gru/MMElU5kcRGbWollJUWM9OUQPTRydfCh1/y0k2K9eTJMXjHQafwH5HHS0h/KA==&returnType=JSON&numOfRows=203",
+        "http://apis.data.go.kr/1262000/TravelAlarmService0404/getTravelAlarm0404List?serviceKey=YO9eH5JtPGlCnJe4hsmmj0Gru/MMElU5kcRGbWollJUWM9OUQPTRydfCh1/y0k2K9eTJMXjHQafwH5HHS0h/KA==&returnType=JSON&page=1&perPage=197",
       );
 
       if (!response.ok) {
@@ -45,7 +45,7 @@ const GlobeComponent = () => {
         },
       });
 
-      return data.json();
+      return data.json() as Promise<FeatureCollection>;
     } catch (error) {
       console.error("Error fetching GeoJSON:", error);
     }
@@ -92,7 +92,7 @@ const GlobeComponent = () => {
           );
           if (countryWarning) {
             const alarmLevel = countryWarning.alarm_lvl;
-            return ColorLevel[alarmLevel] || ColorLevel[0]; 
+            return ColorLevel[alarmLevel] || ColorLevel[0];
           }
           return ColorLevel[0]; // 기본 값
         }}
