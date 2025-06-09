@@ -20,10 +20,10 @@ const CountrySearchPage = () => {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(
-          "http://apis.data.go.kr/1262000/TravelAlarmService0404/getTravelAlarm0404List?serviceKey=YO9eH5JtPGlCnJe4hsmmj0Gru/MMElU5kcRGbWollJUWM9OUQPTRydfCh1/y0k2K9eTJMXjHQafwH5HHS0h/KA==&returnType=JSON&page=1&perPage=197",
+          "http://apis.data.go.kr/1262000/TravelAlarmService0404/getTravelAlarm0404List?serviceKey=YO9eH5JtPGlCnJe4hsmmj0Gru%2FMMElU5kcRGbWollJUWM9OUQPTRydfCh1%2Fy0k2K9eTJMXjHQafwH5HHS0h%2FKA%3D%3D&page=1&numOfRows=203&perPage=203&returnType=JSON",
         );
-        if (Array.isArray(response.data.data)) {
-          setCountries(response.data.data);
+        if (Array.isArray(response.data?.response?.body?.items?.item)) {
+          setCountries(response.data?.response?.body?.items?.item);
         } else {
           console.error("Received data is not an array:", response.data);
         }
